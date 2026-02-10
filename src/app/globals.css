@@ -1,11 +1,39 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Geist&family=Geist+Mono&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Geist&family=Geist+Mono&display=swap");
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --font-geist-sans: 'Geist', sans-serif;
-  --font-geist-mono: 'Geist Mono', monospace;
+  --font-geist-sans: "Geist", sans-serif;
+  --font-geist-mono: "Geist Mono", monospace;
+
+  /* Brand Colors */
+  --color-brand-50: oklch(95.13% 0.023 256.1);
+  --color-brand-100: oklch(90.17% 0.048 259.1);
+  --color-brand-200: oklch(80.72% 0.097 258.14);
+  --color-brand-300: oklch(71.49% 0.149 258.39);
+  --color-brand-400: oklch(63.31% 0.198 258.73);
+  --color-brand-500: oklch(56.35% 0.241 260.82);
+  --color-brand-600: oklch(48.02% 0.201 260.48);
+  --color-brand-700: oklch(39.11% 0.161 260.13);
+  --color-brand-800: oklch(29.89% 0.116 259.04);
+  --color-brand-900: oklch(19.67% 0.068 256.39);
+  --color-brand-950: oklch(16.49% 0.052 253.9);
+}
+
+/* Brand Colors */
+@theme {
+  --color-brand-50: oklch(95.13% 0.023 256.1);
+  --color-brand-100: oklch(90.17% 0.048 259.1);
+  --color-brand-200: oklch(80.72% 0.097 258.14);
+  --color-brand-300: oklch(71.49% 0.149 258.39);
+  --color-brand-400: oklch(63.31% 0.198 258.73);
+  --color-brand-500: oklch(56.35% 0.241 260.82);
+  --color-brand-600: oklch(48.02% 0.201 260.48);
+  --color-brand-700: oklch(39.11% 0.161 260.13);
+  --color-brand-800: oklch(29.89% 0.116 259.04);
+  --color-brand-900: oklch(19.67% 0.068 256.39);
+  --color-brand-950: oklch(16.49% 0.052 253.9);
 }
 
 @theme inline {
