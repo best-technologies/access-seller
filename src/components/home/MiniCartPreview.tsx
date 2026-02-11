@@ -10,9 +10,9 @@ export default function MiniCartPreview() {
 
   return (
     <div className="relative group">
-      <button 
+      <button
         onClick={() => router.push("/cart")}
-        className="flex items-center gap-2 px-4 py-2 rounded hover:bg-indigo-50"
+        className="flex items-center gap-2 pr-2 py-2 rounded hover:bg-indigo-50"
       >
         <div className="relative">
           <ShoppingCart className="w-6 h-6 text-indigo-600" />
@@ -28,15 +28,20 @@ export default function MiniCartPreview() {
         ) : (
           <ul className="divide-y divide-gray-200 mb-2">
             {cart.map((item) => (
-              <li key={item.productId} className="py-2 flex justify-between items-center">
-                <span className="truncate">{item.product?.name || item.productId}</span>
+              <li
+                key={item.productId}
+                className="py-2 flex justify-between items-center"
+              >
+                <span className="truncate">
+                  {item.product?.name || item.productId}
+                </span>
                 <span className="text-gray-600 text-sm">x{item.quantity}</span>
                 <span className="font-medium">₦{item.price}</span>
               </li>
             ))}
           </ul>
         )}
-        <button 
+        <button
           onClick={() => router.push("/cart")}
           className="w-full bg-indigo-600 text-white py-2 rounded mt-2 hover:bg-indigo-700 transition"
         >
