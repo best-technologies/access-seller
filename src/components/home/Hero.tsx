@@ -5,19 +5,35 @@ import Image from "next/image";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
+/**
+ * Carousel slides with responsive images for different screen sizes.
+ *
+ * Naming convention for images:
+ * - Mobile: accessseller-carousel-XX-mobile.jpg
+ * - Tablet: accessseller-carousel-XX-tablet.jpg
+ * - Desktop: accessseller-carousel-XX-desktop.jpg
+ *
+ * All three sizes should be provided for optimal display across devices.
+ */
 const slides = [
   {
-    src: "/images/hero-carousels/accessseller-carousel-01.jpg",
+    mobile: "/images/hero-carousels/accessseller-carousel-01-mobile.jpg",
+    tablet: "/images/hero-carousels/accessseller-carousel-01-tablet.jpg",
+    desktop: "/images/hero-carousels/accessseller-carousel-01-desktop.jpg",
     alt: "Banner 1",
     href: "/products",
   },
   {
-    src: "/images/hero-carousels/accessseller-carousel-02.jpg",
+    mobile: "/images/hero-carousels/accessseller-carousel-02-mobile.jpg",
+    tablet: "/images/hero-carousels/accessseller-carousel-02-tablet.jpg",
+    desktop: "/images/hero-carousels/accessseller-carousel-02-desktop.jpg",
     alt: "Banner 2",
     href: "/products",
   },
   {
-    src: "/images/hero-carousels/accessseller-carousel-03.jpg",
+    mobile: "/images/hero-carousels/accessseller-carousel-03-mobile.jpg",
+    tablet: "/images/hero-carousels/accessseller-carousel-03-tablet.jpg",
+    desktop: "/images/hero-carousels/accessseller-carousel-03-desktop.jpg",
     alt: "Banner 3",
     href: "/products",
   },
@@ -61,11 +77,34 @@ export default function Hero() {
             title="Learn More"
             className="relative w-full h-full flex-shrink-0"
           >
+            {/* Mobile Image */}
             <Image
-              src={slide.src}
+              src={slide.mobile}
               alt={slide.alt}
               fill
-              className="object-cover"
+              className="object-cover block md:hidden"
+              priority={i === 0}
+              sizes="100vw"
+              quality={90}
+            />
+
+            {/* Tablet Image */}
+            <Image
+              src={slide.tablet}
+              alt={slide.alt}
+              fill
+              className="object-cover hidden md:block lg:hidden"
+              priority={i === 0}
+              sizes="100vw"
+              quality={90}
+            />
+
+            {/* Desktop Image */}
+            <Image
+              src={slide.desktop}
+              alt={slide.alt}
+              fill
+              className="object-cover hidden lg:block"
               priority={i === 0}
               sizes="100vw"
               quality={90}
@@ -91,7 +130,7 @@ export default function Hero() {
       </div>
 
       {/* Arrow controls — bottom right */}
-      <div className="absolute bottom-5 right-5 flex items-center gap-2 z-10">
+      <div className="absolute bottom-5 right-5 hidden md:flex items-center gap-2 z-10">
         <button
           onClick={prev}
           aria-label="Previous slide"
