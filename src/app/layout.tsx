@@ -6,7 +6,6 @@ import { Toaster } from "react-hot-toast";
 import "./globals.css";
 import { CartProvider } from "@/context/CartContext";
 import { WishlistProvider } from "@/context/WishlistContext";
-import MobileNavTabs from "@/components/common/MobileNavTabs";
 import CookieConsent from "@/components/common/CookieConsent";
 
 export default function RootLayout({
@@ -16,10 +15,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className="min-h-screen bg-white"
-        style={{ "--mobile-nav-height": "64px" } as React.CSSProperties}
-      >
+      <body className="min-h-screen bg-white">
         <AuthProvider>
           <CartProvider>
             <WishlistProvider>
@@ -27,9 +23,6 @@ export default function RootLayout({
               {/* <Navbar /> */}
               {/* Main Content */}
               <main>{children}</main>
-
-              {/* Mobile Bottom Nav Tabs */}
-              <MobileNavTabs />
 
               {/* Footer */}
               <Footer />
@@ -42,16 +35,14 @@ export default function RootLayout({
                   style: {
                     background: "#363636",
                     color: "#fff",
-                    marginBottom: "var(--mobile-nav-height)",
-                    fontSize: "14px", // Smaller font for mobile
+                    fontSize: "14px",
                   },
                   success: {
                     duration: 2000,
                     style: {
                       background: "#10b981",
                       color: "#fff",
-                      marginBottom: "var(--mobile-nav-height)",
-                      fontSize: "14px", // Smaller font for mobile
+                      fontSize: "14px",
                     },
                   },
                   error: {
@@ -59,8 +50,7 @@ export default function RootLayout({
                     style: {
                       background: "#ef4444",
                       color: "#fff",
-                      marginBottom: "var(--mobile-nav-height)",
-                      fontSize: "14px", // Smaller font for mobile
+                      fontSize: "14px",
                     },
                   },
                 }}
