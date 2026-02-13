@@ -327,11 +327,14 @@ export default function Navbar() {
 
             {/* Center: Logo */}
             <Link href="/" className="flex-1 flex justify-center">
-              <span className="text-xl sm:text-2xl font-bold">
-                <span className="text-slate-800">Access</span>
-                <span className="text-brand-500">&</span>
-                <span className="text-slate-800">Sellr</span>
-              </span>
+              <Image
+                src="/accessseller-logo.png"
+                alt="Access&Sellr Logo"
+                width={120}
+                height={40}
+                className="h-8 sm:h-10 w-auto"
+                priority
+              />
             </Link>
 
             {/* Right: User Icon & Cart */}
@@ -675,11 +678,14 @@ export default function Navbar() {
             <div className="flex items-center justify-between h-16 gap-8">
               {/* Logo */}
               <Link href="/" className="flex-shrink-0">
-                <span className="text-2xl font-bold">
-                  <span className="text-slate-800">Access</span>
-                  <span className="text-brand-500">&</span>
-                  <span className="text-slate-800">Sellr</span>
-                </span>
+                <Image
+                  src="/accessseller-logo.png"
+                  alt="Access&Sellr Logo"
+                  width={150}
+                  height={50}
+                  className="h-12 w-auto"
+                  priority
+                />
               </Link>
 
               {/* Search Bar */}
@@ -732,7 +738,13 @@ export default function Navbar() {
           <div className="absolute left-0 top-0 bottom-0 w-[300px] bg-white shadow-2xl overflow-hidden flex flex-col">
             {/* Menu Header */}
             <div className="bg-brand-500 text-white p-4 flex items-center justify-between">
-              <span className="text-lg font-semibold">Logo</span>
+              <Image
+                src="/accessseller-logo.png"
+                alt="Access&Sellr Logo"
+                width={100}
+                height={33}
+                className="h-8 w-auto"
+              />
               <button
                 onClick={() => setIsMenuOpen(false)}
                 className="p-2 hover:bg-brand-600 rounded transition-colors"

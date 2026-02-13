@@ -63,11 +63,13 @@ export default function Footer() {
           {/* Column 1: Brand Logo + Payment Methods */}
           <div className="flex flex-col items-center sm:items-start">
             <Link href="/" className="inline-block mb-4">
-              <span className="text-2xl font-bold">
-                <span className="text-slate-800">Access</span>
-                <span className="text-brand-500">&amp;</span>
-                <span className="text-slate-800">Sellr</span>
-              </span>
+              <Image
+                src="/accessseller-logo.png"
+                alt="Access&Sellr Logo"
+                width={150}
+                height={50}
+                className="h-12 w-auto"
+              />
             </Link>
             <p className="text-sm text-gray-500 mb-4 text-center sm:text-left">
               Your one-stop bookstore for textbooks, e-books, and more.
