@@ -94,6 +94,11 @@ export default function Navbar() {
   const [highlighted, setHighlighted] = useState(-1);
   const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
 
+  // Scroll behavior states
+  const [showNav, setShowNav] = useState(true);
+  const [isAtTop, setIsAtTop] = useState(true);
+  const lastScrollY = useRef(0);
+
   // Prevent body scroll when mobile menu is open
   useEffect(() => {
     if (isMenuOpen) {
@@ -107,6 +112,33 @@ export default function Navbar() {
       document.body.style.overflow = "";
     };
   }, [isMenuOpen]);
+
+  // Handle scroll behavior
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      // Check if at top of page (within 50px threshold)
+      setIsAtTop(currentScrollY < 50);
+
+      // Determine scroll direction and show/hide navbar
+      if (currentScrollY > lastScrollY.current && currentScrollY > 100) {
+        // Scrolling down - hide navbar
+        setShowNav(false);
+      } else if (currentScrollY < lastScrollY.current) {
+        // Scrolling up - show navbar
+        setShowNav(true);
+      }
+
+      lastScrollY.current = currentScrollY;
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   const handleBackdropClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
@@ -251,29 +283,35 @@ export default function Navbar() {
       )}
 
       {/* ========== MOBILE & TABLET NAVBAR (below lg breakpoint) ========== */}
-      <nav className="fixed top-0 left-0 right-0 z-[100] lg:hidden">
-        {/* Promo Banner */}
-        <div className="bg-brand-500 text-white">
-          <div className="flex items-center justify-between px-2 py-2">
-            <button
-              onClick={prevBanner}
-              className="p-1 hover:bg-brand-600 rounded transition-colors"
-              aria-label="Previous promotion"
-            >
-              <ChevronLeft className="w-4 h-4" />
-            </button>
-            <p className="text-xs sm:text-sm font-medium text-center flex-1 px-2">
-              {promoBanners[currentBannerIndex]}
-            </p>
-            <button
-              onClick={nextBanner}
-              className="p-1 hover:bg-brand-600 rounded transition-colors"
-              aria-label="Next promotion"
-            >
-              <ChevronRight className="w-4 h-4" />
-            </button>
+      <nav
+        className={`fixed top-0 left-0 right-0 z-[100] lg:hidden transition-transform duration-300 ${
+          showNav ? "translate-y-0" : "-translate-y-full"
+        }`}
+      >
+        {/* Promo Banner - only show when at top */}
+        {isAtTop && (
+          <div className="bg-brand-500 text-white">
+            <div className="flex items-center justify-between px-2 py-2">
+              <button
+                onClick={prevBanner}
+                className="p-1 hover:bg-brand-600 rounded transition-colors"
+                aria-label="Previous promotion"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              <p className="text-xs sm:text-sm font-medium text-center flex-1 px-2">
+                {promoBanners[currentBannerIndex]}
+              </p>
+              <button
+                onClick={nextBanner}
+                className="p-1 hover:bg-brand-600 rounded transition-colors"
+                aria-label="Next promotion"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Main Navbar Row */}
         <div className="bg-white border-b border-gray-200">
@@ -432,29 +470,35 @@ export default function Navbar() {
       </nav>
 
       {/* ========== DESKTOP NAVBAR (lg and above) ========== */}
-      <nav className="fixed top-0 left-0 right-0 z-[100] hidden lg:block">
-        {/* Promo Banner */}
-        <div className="bg-brand-500 text-white">
-          <div className="max-w-7xl mx-auto flex items-center justify-center px-4 py-2">
-            <button
-              onClick={prevBanner}
-              className="p-1 hover:bg-brand-600 rounded transition-colors mr-4"
-              aria-label="Previous promotion"
-            >
-              <ChevronLeft className="w-4 h-4" />
-            </button>
-            <p className="text-sm font-medium uppercase tracking-wide">
-              {promoBanners[currentBannerIndex]}
-            </p>
-            <button
-              onClick={nextBanner}
-              className="p-1 hover:bg-brand-600 rounded transition-colors ml-4"
-              aria-label="Next promotion"
-            >
-              <ChevronRight className="w-4 h-4" />
-            </button>
+      <nav
+        className={`fixed top-0 left-0 right-0 z-[100] hidden lg:block transition-transform duration-300 ${
+          showNav ? "translate-y-0" : "-translate-y-full"
+        }`}
+      >
+        {/* Promo Banner - only show when at top */}
+        {isAtTop && (
+          <div className="bg-brand-500 text-white">
+            <div className="max-w-7xl mx-auto flex items-center justify-center px-4 py-2">
+              <button
+                onClick={prevBanner}
+                className="p-1 hover:bg-brand-600 rounded transition-colors mr-4"
+                aria-label="Previous promotion"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              <p className="text-sm font-medium uppercase tracking-wide">
+                {promoBanners[currentBannerIndex]}
+              </p>
+              <button
+                onClick={nextBanner}
+                className="p-1 hover:bg-brand-600 rounded transition-colors ml-4"
+                aria-label="Next promotion"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Top Navigation Row (Categories Left, Account/Wishlist Right) */}
         <div className="bg-white border-b border-gray-200">
