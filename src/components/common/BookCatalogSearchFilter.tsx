@@ -54,7 +54,7 @@ const BookCatalogSearchFilter: React.FC<BookCatalogSearchFilterProps> = ({
           {showSeeAllButton && (
             <a
               href={seeAllHref}
-              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-indigo-600 bg-white border border-indigo-200 rounded-lg hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2 focus:ring-offset-transparent transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
+              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-indigo-600 bg-white border border-indigo-200 rounded-lg hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2 focus:ring-offset-transparent transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 underline"
             >
               See All
             </a>
@@ -87,18 +87,20 @@ const BookCatalogSearchFilter: React.FC<BookCatalogSearchFilterProps> = ({
                 type="text"
                 placeholder="Search categories..."
                 value={categorySearch}
-                onChange={e => setCategorySearch(e.target.value)}
+                onChange={(e) => setCategorySearch(e.target.value)}
                 className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-t-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 bg-white/50 backdrop-blur-sm shadow-sm hover:shadow-md text-sm"
               />
               <div className="relative">
                 <select
                   className="w-full pl-10 pr-8 py-2.5 border border-t-0 border-gray-200 rounded-b-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 appearance-none bg-white/50 backdrop-blur-sm shadow-sm hover:shadow-md text-sm"
                   value={selectedCategory}
-                  onChange={e => setSelectedCategory(e.target.value)}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
                 >
                   <option value="">All Categories</option>
-                  {filteredCategories.map(cat => (
-                    <option key={cat.value} value={cat.value}>{cat.label}</option>
+                  {filteredCategories.map((cat) => (
+                    <option key={cat.value} value={cat.value}>
+                      {cat.label}
+                    </option>
                   ))}
                 </select>
                 <span className="absolute right-3 top-2 z-20 pointer-events-none">
@@ -111,15 +113,27 @@ const BookCatalogSearchFilter: React.FC<BookCatalogSearchFilterProps> = ({
           {/* Status Filter */}
           <div className="relative">
             <span className="absolute left-3 top-2 z-20 pointer-events-none">
-              <svg className="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              <svg
+                className="h-4 w-4 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
               </svg>
             </span>
             <div className="relative">
               <select
                 className="w-full pl-10 pr-8 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 appearance-none bg-white/50 backdrop-blur-sm shadow-sm hover:shadow-md text-sm"
                 value={statusValue}
-                onChange={e => setStatusValue && setStatusValue(e.target.value)}
+                onChange={(e) =>
+                  setStatusValue && setStatusValue(e.target.value)
+                }
               >
                 <option value="">All Status</option>
                 <option value="in-stock">In Stock</option>
@@ -137,4 +151,4 @@ const BookCatalogSearchFilter: React.FC<BookCatalogSearchFilterProps> = ({
   );
 };
 
-export default BookCatalogSearchFilter; 
+export default BookCatalogSearchFilter;

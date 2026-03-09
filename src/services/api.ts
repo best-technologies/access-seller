@@ -1,15 +1,18 @@
 // api.ts - Pure API communication layer
-import { DashboardResponse } from '@/types/admin/dashboard/dashboard';
-import type { ProductsResponse } from '@/types/admin/products/products';
-import type { CustomersResponse } from '@/types/admin/customers/customers';
-import axios, { AxiosError, AxiosInstance } from 'axios';
-import type { BrowseProductsResponse, Product } from '@/types/product';
-import { PromoCodeVerifyResponse } from '@/types/admin/discounts/discount';
-import type { ApiResponse } from '@/types/order';
+import { DashboardResponse } from "@/types/admin/dashboard/dashboard";
+import type { ProductsResponse } from "@/types/admin/products/products";
+import type { CustomersResponse } from "@/types/admin/customers/customers";
+import axios, { AxiosError, AxiosInstance } from "axios";
+import type { BrowseProductsResponse, Product } from "@/types/product";
+import { PromoCodeVerifyResponse } from "@/types/admin/discounts/discount";
+import type { ApiResponse } from "@/types/order";
 
 let API_URL: string = "";
-if(process.env.NODE_ENV === "development") {
-  API_URL = "http://localhost:2000/api/v1"
+if (process.env.NODE_ENV === "development") {
+  API_URL =
+    process.env.NEXT_PUBLIC_API_URL_STAGING ||
+    process.env.NEXT_PUBLIC_API_URL ||
+    "https://access-seller-backend.onrender.com/api/v1";
 } else if (process.env.NODE_ENV === "production") {
   API_URL = process.env.NEXT_PUBLIC_API_URL || "";
 }
@@ -21,9 +24,9 @@ const axiosInstance: AxiosInstance = axios.create({
   baseURL: API_URL,
   timeout: 30000,
   headers: {
-    'Content-Type': 'application/json',
-    'Accept': 'application/json',
-  }
+    "Content-Type": "application/json",
+    Accept: "application/json",
+  },
 });
 
 // Add request interceptor for auth token
@@ -40,10 +43,10 @@ axiosInstance.interceptors.response.use(
   (response) => response.data,
   (error: AxiosError<{ message: string }>) => {
     if (error.response?.status === 401) {
-      throw new Error('UNAUTHORIZED');
+      throw new Error("UNAUTHORIZED");
     }
     throw new Error(error.response?.data?.message || error.message);
-  }
+  },
 );
 
 export interface RegistrationData {
@@ -76,7 +79,7 @@ export interface LoginResponse {
   message: string;
   data: {
     access_token?: string; // optional, only for normal users
-    role?: string;         // optional, for privileged users
+    role?: string; // optional, for privileged users
   };
 }
 
@@ -99,7 +102,11 @@ export interface AffiliateAccessResponse {
   message: string;
   data: {
     is_affiliate: boolean;
-    affiliate_status: 'not_affiliate' | 'awaiting_approval' | 'rejected' | 'approved';
+    affiliate_status:
+      | "not_affiliate"
+      | "awaiting_approval"
+      | "rejected"
+      | "approved";
     createdAt: string | null;
     affiliate: Record<string, unknown>; // Use a more specific type if available
     stats: {
@@ -128,73 +135,73 @@ export interface AddCategoryReponse {
   success: boolean;
   message: string;
   data: {
-    id: string,
-    name: string,
-    description: string,
-    storeId: string,
-    isActive: true,
-    createdAt: string,
-    updatedAt: string,
-    createdByName: string,
-    createdByEmail: string
-}
+    id: string;
+    name: string;
+    description: string;
+    storeId: string;
+    isActive: true;
+    createdAt: string;
+    updatedAt: string;
+    createdByName: string;
+    createdByEmail: string;
+  };
 }
 
 export interface AddGenreResponse {
   success: boolean;
   message: string;
   data: {
-    id: string,
-    name: string,
-    description?: string,
-    isActive?: boolean,
-    createdAt?: string,
-    updatedAt?: string,
-    createdByName?: string,
-    createdByEmail?: string
-  }
+    id: string;
+    name: string;
+    description?: string;
+    isActive?: boolean;
+    createdAt?: string;
+    updatedAt?: string;
+    createdByName?: string;
+    createdByEmail?: string;
+  };
 }
 
 export interface AddLanguageResponse {
   success: boolean;
   message: string;
   data: {
-    id: string,
-    name: string,
-    isActive?: boolean,
-    createdAt?: string,
-    updatedAt?: string,
-    createdByName?: string,
-    createdByEmail?: string
-  }
+    id: string;
+    name: string;
+    isActive?: boolean;
+    createdAt?: string;
+    updatedAt?: string;
+    createdByName?: string;
+    createdByEmail?: string;
+  };
 }
 
 export interface AddFormatResponse {
   success: boolean;
   message: string;
   data: {
-    id: string,
-    name: string,
-    isActive?: boolean,
-    createdAt?: string,
-    updatedAt?: string,
-    createdByName?: string,
-    createdByEmail?: string
-  }
+    id: string;
+    name: string;
+    isActive?: boolean;
+    createdAt?: string;
+    updatedAt?: string;
+    createdByName?: string;
+    createdByEmail?: string;
+  };
 }
 
 export interface AddAgeRatingResponse {
   success: boolean;
   message: string;
   data: {
-    id: string,
-    name: string,
-    isActive?: boolean,
-    createdAt?: string,
-    updatedAt?: string,
-    createdByName?: string,
-    createdByEmail?: string
-  }
+    id: string;
+    name: string;
+    isActive?: boolean;
+    createdAt?: string;
+    updatedAt?: string;
+    createdByName?: string;
+    createdByEmail?: string;
+  };
 }
 
 // Response type for adding a new bank
@@ -216,23 +223,23 @@ export interface AddNewBankResponse {
 // Token management - to be used by auth context
 export const tokenManager = {
   get: () => {
-    if (typeof window === 'undefined') return null;
-    const token = localStorage.getItem('access_token');
-    console.log('TokenManager.get() called, token exists:', !!token);
+    if (typeof window === "undefined") return null;
+    const token = localStorage.getItem("access_token");
+    console.log("TokenManager.get() called, token exists:", !!token);
     return token;
   },
-  
+
   set: (token: string) => {
-    if (typeof window === 'undefined') return;
-    console.log('TokenManager.set() called, storing token');
-    localStorage.setItem('access_token', token);
+    if (typeof window === "undefined") return;
+    console.log("TokenManager.set() called, storing token");
+    localStorage.setItem("access_token", token);
   },
-  
+
   remove: () => {
-    if (typeof window === 'undefined') return;
-    console.log('TokenManager.remove() called, removing token');
-    localStorage.removeItem('access_token');
-  }
+    if (typeof window === "undefined") return;
+    console.log("TokenManager.remove() called, removing token");
+    localStorage.removeItem("access_token");
+  },
 };
 
 // Type for cart order data
@@ -277,14 +284,13 @@ export interface CartOrderData {
 }
 
 // Pure API methods - NO token storage or state management
-export const api = { 
+export const api = {
   auth: {
     login: (email: string, password: string): Promise<LoginResponse> =>
-      
-      axiosInstance.post('/auth/sign-in', { email, password }),
+      axiosInstance.post("/auth/sign-in", { email, password }),
 
     register: (data: RegistrationData): Promise<RegisterResponse> =>
-      axiosInstance.post('/auth/register', {
+      axiosInstance.post("/auth/register", {
         email: data.email,
         password: data.password,
         first_name: data.first_name,
@@ -292,68 +298,86 @@ export const api = {
       }),
 
     verifyOTP: (otp: string, email: string) =>
-      axiosInstance.post('/auth/admin-verify-login-otp', { otp, email }),
+      axiosInstance.post("/auth/admin-verify-login-otp", { otp, email }),
 
-    logout: () =>
-      axiosInstance.post('/auth/logout'),
+    logout: () => axiosInstance.post("/auth/logout"),
 
-    refreshToken: () =>
-      axiosInstance.post('/auth/refresh'),
-      
+    refreshToken: () => axiosInstance.post("/auth/refresh"),
+
     sendOtpToEmail: (email: string) =>
-      axiosInstance.post('/auth/request-password-reset-email', { email }),
+      axiosInstance.post("/auth/request-password-reset-email", { email }),
 
     resendLoginOtp: (email: string) =>
-      axiosInstance.post('/auth/resend-login-otp', { email }),
+      axiosInstance.post("/auth/resend-login-otp", { email }),
 
     updatePassword: (email: string, otp: string, newPassword: string) =>
-      axiosInstance.post('/auth/reset-password', { 
-        email, 
-        otp, 
-        new_password: newPassword 
+      axiosInstance.post("/auth/reset-password", {
+        email,
+        otp,
+        new_password: newPassword,
       }),
   },
-  
+
   // User endpoints
   user: {
     getProfile: async (): Promise<ProfileResponse> => {
-      console.log('Fetching user profile...');
-      const data = await axiosInstance.get('/auth/fetch-user-details');
-      console.log('Profile fetch response:', data);
+      console.log("Fetching user profile...");
+      const data = await axiosInstance.get("/auth/fetch-user-details");
+      console.log("Profile fetch response:", data);
       return data as unknown as ProfileResponse;
     },
     getCheckoutProfile: async () => {
-      const data = await axiosInstance.get('/user/user-checkout-profile');
+      const data = await axiosInstance.get("/user/user-checkout-profile");
       return data;
     },
     getAffiliateDashboard: async () => {
-      const data = await axiosInstance.get('/user/affiliate-dashboard');
+      const data = await axiosInstance.get("/user/affiliate-dashboard");
       return data;
     },
     getAffiliateLinks: async () => {
-      const data = await axiosInstance.get('/user/affiliate-links');
+      const data = await axiosInstance.get("/user/affiliate-links");
       return data;
     },
     generateAffiliateLink: async (productId: string) => {
-      const data = await axiosInstance.post('/user/generate-link', { productId });
+      const data = await axiosInstance.post("/user/generate-link", {
+        productId,
+      });
       return data;
     },
-    requestAffiliateAccess: async (niche: string, reason: string): Promise<AffiliateAccessResponse> => {
-      const res = await axiosInstance.post('/user/request-affiliate-access', { niche, reason });
-      console.log("[API Call] response: ", res.data)
+    requestAffiliateAccess: async (
+      niche: string,
+      reason: string,
+    ): Promise<AffiliateAccessResponse> => {
+      const res = await axiosInstance.post("/user/request-affiliate-access", {
+        niche,
+        reason,
+      });
+      console.log("[API Call] response: ", res.data);
       return res as unknown as AffiliateAccessResponse;
     },
-    addBankAccount: async (data: { bankName: string; bankCode: string; accountNumber: string; accountName: string }): Promise<AddNewBankResponse> => {
-      const res = await axiosInstance.post('/user/bank', data);
-      console.log("[API] response: ", res)
+    addBankAccount: async (data: {
+      bankName: string;
+      bankCode: string;
+      accountNumber: string;
+      accountName: string;
+    }): Promise<AddNewBankResponse> => {
+      const res = await axiosInstance.post("/user/bank", data);
+      console.log("[API] response: ", res);
       return res as unknown as AddNewBankResponse;
     },
-    deleteBankAccount: async (bankId: string): Promise<{ success: boolean; message: string }> => {
-      const res = await axiosInstance.delete('/user/bank', { data: { bankId } });
+    deleteBankAccount: async (
+      bankId: string,
+    ): Promise<{ success: boolean; message: string }> => {
+      const res = await axiosInstance.delete("/user/bank", {
+        data: { bankId },
+      });
       return res as unknown as { success: boolean; message: string };
     },
-    requestWithdrawal: async (data: { amount: number; bankCode: string }): Promise<{ success: boolean; message: string }> => {
-      const res = await axiosInstance.post('/user/withdrawal-request', data);
+    requestWithdrawal: async (data: {
+      amount: number;
+      bankCode: string;
+    }): Promise<{ success: boolean; message: string }> => {
+      const res = await axiosInstance.post("/user/withdrawal-request", data);
       return res as unknown as { success: boolean; message: string };
     },
     getUserOrders: async (page = 1): Promise<ApiResponse> => {
@@ -362,16 +386,18 @@ export const api = {
   },
 
   public: {
-    getHomepageProducts: async ():Promise<DashboardResponse> => {
-      console.log('[API] Fetching homepage products from /products');
-      const response = await axiosInstance.get('/products');
-      console.log('[API] Homepage products response:', response);
+    getHomepageProducts: async (): Promise<DashboardResponse> => {
+      console.log("[API] Fetching homepage products from /products");
+      const response = await axiosInstance.get("/products");
+      console.log("[API] Homepage products response:", response);
       return response as unknown as DashboardResponse;
     },
     getBrowseProducts: async (page = 1): Promise<BrowseProductsResponse> => {
-      console.log(`[API] Fetching browse products from /products/browse?page=${page}`);
+      console.log(
+        `[API] Fetching browse products from /products/browse?page=${page}`,
+      );
       const response = await axiosInstance.get(`/products/browse?page=${page}`);
-      console.log('[API] Browse products response:', response);
+      console.log("[API] Browse products response:", response);
       return response as unknown as BrowseProductsResponse;
     },
     getSingleProduct: async (id: string): Promise<Product> => {
@@ -379,15 +405,33 @@ export const api = {
       const response = await axiosInstance.get(`/products/${id}`);
       return response.data as Product;
     },
-    getProductsByCategory: async (categoryName: string, page = 1, limit = 20): Promise<BrowseProductsResponse> => {
+    getProductsByCategory: async (
+      categoryName: string,
+      page = 1,
+      limit = 20,
+    ): Promise<BrowseProductsResponse> => {
       // Fetch products by category from the backend
-      const response = await axiosInstance.get(`/products/by-category/${encodeURIComponent(categoryName)}?page=${page}&limit=${limit}`);
+      const response = await axiosInstance.get(
+        `/products/by-category/${encodeURIComponent(categoryName)}?page=${page}&limit=${limit}`,
+      );
       return response as unknown as BrowseProductsResponse;
     },
-    getSearchSuggestions: async (q: string): Promise<Array<{ id: string; title: string; author: string; image: string; slug: string }>> => {
+    getSearchSuggestions: async (
+      q: string,
+    ): Promise<
+      Array<{
+        id: string;
+        title: string;
+        author: string;
+        image: string;
+        slug: string;
+      }>
+    > => {
       if (!q || q.length < 2) return [];
-      const response = await axiosInstance.get('/products/search-suggestions', { params: { q } });
-      console.log('search suggestions response', response);
+      const response = await axiosInstance.get("/products/search-suggestions", {
+        params: { q },
+      });
+      console.log("search suggestions response", response);
       const data = response.data;
       if (Array.isArray(data)) {
         return data;
@@ -402,14 +446,16 @@ export const api = {
   admin: {
     dashboard: async (): Promise<DashboardResponse> => {
       console.log("Fetching admin dashboard");
-      const response = await axiosInstance.get("admin/dashboard/stats")
-      return response as unknown as DashboardResponse
+      const response = await axiosInstance.get("admin/dashboard/stats");
+      return response as unknown as DashboardResponse;
     },
     products: {
       getAll: async (page = 1): Promise<ProductsResponse> => {
         console.log("Fetching admin products");
-        const response = await axiosInstance.get(`admin/products/all?page=${page}`);
-        console.log("get all products response: ", response)
+        const response = await axiosInstance.get(
+          `admin/products/all?page=${page}`,
+        );
+        console.log("get all products response: ", response);
         return response as unknown as ProductsResponse;
       },
       create: async (formData: FormData): Promise<unknown> => {
@@ -418,33 +464,41 @@ export const api = {
           baseURL: API_URL,
           timeout: 30000,
           headers: {
-            'Accept': 'application/json',
-          }
+            Accept: "application/json",
+          },
         });
-        
+
         // Add auth token
         const token = tokenManager.get();
         if (token) {
           formDataInstance.defaults.headers.Authorization = `Bearer ${token}`;
         }
-        
-        const response = await formDataInstance.post("admin/products/add-new", formData);
+
+        const response = await formDataInstance.post(
+          "admin/products/add-new",
+          formData,
+        );
         return response.data;
       },
-      uploadImage: async (formData: FormData): Promise<{ success: boolean; url?: string; message?: string }> => {
+      uploadImage: async (
+        formData: FormData,
+      ): Promise<{ success: boolean; url?: string; message?: string }> => {
         // Upload a single image and return its URL
         const formDataInstance = axios.create({
           baseURL: API_URL,
           timeout: 30000,
           headers: {
-            'Accept': 'application/json',
-          }
+            Accept: "application/json",
+          },
         });
         const token = tokenManager.get();
         if (token) {
           formDataInstance.defaults.headers.Authorization = `Bearer ${token}`;
         }
-        const response = await formDataInstance.post("admin/products/upload-image", formData);
+        const response = await formDataInstance.post(
+          "admin/products/upload-image",
+          formData,
+        );
         return response.data;
       },
       update: async (id: string, formData: FormData): Promise<unknown> => {
@@ -452,16 +506,19 @@ export const api = {
           baseURL: API_URL,
           timeout: 30000,
           headers: {
-            'Accept': 'application/json',
-          }
+            Accept: "application/json",
+          },
         });
         const token = tokenManager.get();
         if (token) {
           formDataInstance.defaults.headers.Authorization = `Bearer ${token}`;
         }
-        const response = await formDataInstance.patch(`admin/products/update/${id}`, formData);
+        const response = await formDataInstance.patch(
+          `admin/products/update/${id}`,
+          formData,
+        );
         return response.data;
-      }
+      },
     },
     customers: async (): Promise<CustomersResponse> => {
       console.log("Fetching admin customers");
@@ -469,12 +526,14 @@ export const api = {
       return response as unknown as CustomersResponse;
     },
     fetchMetadata: async (): Promise<MetadataResponse> => {
-      const response = await axiosInstance.get('/admin/metadata/all');
+      const response = await axiosInstance.get("/admin/metadata/all");
       return response as unknown as MetadataResponse;
     },
-    getAffiliateDashboard: async (): Promise<import('@/types/admin/dashboard/dashboard').AffiliateDashboardResponse> => {
-      const response = await axiosInstance.get('/admin/affiliates');
-      return response as unknown as import('@/types/admin/dashboard/dashboard').AffiliateDashboardResponse;
+    getAffiliateDashboard: async (): Promise<
+      import("@/types/admin/dashboard/dashboard").AffiliateDashboardResponse
+    > => {
+      const response = await axiosInstance.get("/admin/affiliates");
+      return response as unknown as import("@/types/admin/dashboard/dashboard").AffiliateDashboardResponse;
     },
     getAllAffiliates: async (page = 1, limit = 20, status?: string) => {
       let url = `/admin/affiliates/all?page=${page}&limit=${limit}`;
@@ -484,48 +543,82 @@ export const api = {
     },
     getAffiliatePayouts: async (page = 1, limit = 20, status?: string) => {
       let url = `/admin/affiliates/payouts?page=${page}&limit=${limit}`;
-      if (status && status !== 'all') url += `&status=${status}`;
+      if (status && status !== "all") url += `&status=${status}`;
       const response = await axiosInstance.get(url);
       return response;
     },
     updateAffiliateStatus: async (id: string, status: string) => {
       // Sends a PUT request to update affiliate status
-      const response = await axiosInstance.put(`/admin/affiliates/${id}/status`, { status });
+      const response = await axiosInstance.put(
+        `/admin/affiliates/${id}/status`,
+        { status },
+      );
       return response;
     },
-    addCategory: async (name: string, description: string): Promise<AddCategoryReponse> => {
-      const response = await axiosInstance.post("/admin/category/add-new", { name, description });
+    addCategory: async (
+      name: string,
+      description: string,
+    ): Promise<AddCategoryReponse> => {
+      const response = await axiosInstance.post("/admin/category/add-new", {
+        name,
+        description,
+      });
       return response as unknown as AddCategoryReponse;
     },
-    addGenre: async (name: string, description?: string): Promise<AddGenreResponse> => {
-      const response = await axiosInstance.post("/admin/genres/add-new", { name, description });
+    addGenre: async (
+      name: string,
+      description?: string,
+    ): Promise<AddGenreResponse> => {
+      const response = await axiosInstance.post("/admin/genres/add-new", {
+        name,
+        description,
+      });
       return response as unknown as AddGenreResponse;
     },
     addLanguage: async (name: string): Promise<AddLanguageResponse> => {
-      const response = await axiosInstance.post("/admin/languages/add-new", { name });
+      const response = await axiosInstance.post("/admin/languages/add-new", {
+        name,
+      });
       return response as unknown as AddLanguageResponse;
     },
-    addFormat: async (name: string, description?: string): Promise<AddFormatResponse> => {
-      const response = await axiosInstance.post("/admin/formats/add-new", { name, description });
+    addFormat: async (
+      name: string,
+      description?: string,
+    ): Promise<AddFormatResponse> => {
+      const response = await axiosInstance.post("/admin/formats/add-new", {
+        name,
+        description,
+      });
       return response as unknown as AddFormatResponse;
     },
     addAgeRating: async (name: string): Promise<AddAgeRatingResponse> => {
-      const response = await axiosInstance.post("/admin/age-ratings/add-new", { name });
+      const response = await axiosInstance.post("/admin/age-ratings/add-new", {
+        name,
+      });
       return response as unknown as AddAgeRatingResponse;
     },
     updateWithdrawalStatus: async (withdrawalId: string, status: string) => {
       // Calls /admin/affiliates/update-withdrawal-status with withdrawalId and status
-      const response = await axiosInstance.post('/admin/affiliates/update-withdrawal-status', {
-        withdrawalId,
-        status,
-      });
+      const response = await axiosInstance.post(
+        "/admin/affiliates/update-withdrawal-status",
+        {
+          withdrawalId,
+          status,
+        },
+      );
       return response;
     },
   },
 
   discount: {
-    verifyPromoCode: async (promoCode: string, productId: string): Promise<PromoCodeVerifyResponse> => {
-      const response = await axiosInstance.post('/discount/verify-promocode', { code: promoCode, productId });
+    verifyPromoCode: async (
+      promoCode: string,
+      productId: string,
+    ): Promise<PromoCodeVerifyResponse> => {
+      const response = await axiosInstance.post("/discount/verify-promocode", {
+        code: promoCode,
+        productId,
+      });
       console.log("[API call] Response: ", response);
       return response as unknown as PromoCodeVerifyResponse;
     },
@@ -548,53 +641,67 @@ export const api = {
       callbackUrl: string;
     }) => {
       // Sends backendData to /paystack/affiliate-initialise-paystack-payment
-      return axiosInstance.post('/paystack/affiliate-initialise-paystack-payment', data);
+      return axiosInstance.post(
+        "/paystack/affiliate-initialise-paystack-payment",
+        data,
+      );
     },
     cartCheckoutInitialisePayment: async (orderData: CartOrderData) => {
       // Sends orderData to /paystack/cart-checkout-initialise-paystack-payment
-      return axiosInstance.post('/paystack/cart-checkout-initialise-paystack-payment', orderData);
+      return axiosInstance.post(
+        "/paystack/cart-checkout-initialise-paystack-payment",
+        orderData,
+      );
     },
     verifyPaystackFunding: async (reference: string) => {
-      console.log("calling endpoint: /paystack/verify-paystack-funding")
-      return axiosInstance.post('/paystack/verify-paystack-funding', { reference });
+      console.log("calling endpoint: /paystack/verify-paystack-funding");
+      return axiosInstance.post("/paystack/verify-paystack-funding", {
+        reference,
+      });
     },
     verifyCheckoutPayment: async (reference: string) => {
-      console.log("calling endpoint: /paystack/verify-cart-payment")
-      return axiosInstance.post('/paystack/verify-cart-payment', { reference });
+      console.log("calling endpoint: /paystack/verify-cart-payment");
+      return axiosInstance.post("/paystack/verify-cart-payment", { reference });
     },
     getOrderById: async (id: string) => {
       // Calls /paystack/order/:id to fetch order details
       return axiosInstance.get(`/paystack/order/${id}`);
     },
     getBanks: async () => {
-      const response = await axiosInstance.get('/paystack/banks');
+      const response = await axiosInstance.get("/paystack/banks");
       return response;
     },
     verifyAccountNumber: async (account_number: string, bank_code: string) => {
-      const response = await axiosInstance.post('/paystack/verify-account-number', { account_number, bank_code });
+      const response = await axiosInstance.post(
+        "/paystack/verify-account-number",
+        { account_number, bank_code },
+      );
       return response as unknown;
     },
-    manualBankDeposit: async (orderData: Record<string, unknown>, files: File[]) => {
+    manualBankDeposit: async (
+      orderData: Record<string, unknown>,
+      files: File[],
+    ) => {
       const formData = new FormData();
       // Append each property of orderData at the root level
       Object.entries(orderData).forEach(([key, value]) => {
-        if (typeof value === 'object' && value !== null) {
+        if (typeof value === "object" && value !== null) {
           formData.append(key, JSON.stringify(value));
-        } else if (typeof value === 'string' || value instanceof Blob) {
+        } else if (typeof value === "string" || value instanceof Blob) {
           formData.append(key, value);
         } else {
           formData.append(key, String(value));
         }
       });
       files.forEach((file) => {
-        formData.append('files', file);
+        formData.append("files", file);
       });
       // Sends orderData and files to /paystack/manual-bank-deposit
-      return axiosInstance.post('/paystack/manual-bank-deposit', formData, {
+      return axiosInstance.post("/paystack/manual-bank-deposit", formData, {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          "Content-Type": "multipart/form-data",
         },
       });
     },
   },
-}
+};

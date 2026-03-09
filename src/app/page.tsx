@@ -1,15 +1,12 @@
-'use client';
+"use client";
 
 import Hero from "@/components/home/Hero";
 import FeaturedBooks from "@/components/home/FeaturedBooks";
-import ReferralHighlight from "@/components/home/ReferralHighlight";
 import NewArrivals from "@/components/home/NewArrivals";
 import Categories from "@/components/home/Categories";
-import HowItWorks from "@/components/home/HowItWorks";
-import Testimonials from "@/components/home/Testimonials";
 import Navbar from "@/components/home/Navbar";
-import { useEffect, useState } from 'react';
-import { api } from '@/services/api';
+import { useEffect, useState } from "react";
+import { api } from "@/services/api";
 
 // Types for homepage featured books and categories
 interface HomepageBook {
@@ -32,7 +29,7 @@ interface HomepageCategory {
   display_image?: string;
 }
 
-const HOMEPAGE_CACHE_KEY = 'homepage_products_cache';
+const HOMEPAGE_CACHE_KEY = "homepage_products_cache";
 const HOMEPAGE_CACHE_TIME = 60 * 60 * 1000; // 1 hour
 
 export default function Home() {
@@ -43,37 +40,43 @@ export default function Home() {
   // Add fetchHomepageData as a function so it can be called on retry
   const fetchHomepageData = async () => {
     setLoading(true);
-    const cached = typeof window !== 'undefined' ? localStorage.getItem(HOMEPAGE_CACHE_KEY) : null;
+    const cached =
+      typeof window !== "undefined"
+        ? localStorage.getItem(HOMEPAGE_CACHE_KEY)
+        : null;
     if (cached) {
       try {
         const { data, timestamp } = JSON.parse(cached);
         if (Date.now() - timestamp < HOMEPAGE_CACHE_TIME) {
-          console.log('[Homepage] Using cached homepage data', data);
+          console.log("[Homepage] Using cached homepage data", data);
           setHomepageData(data);
           setError(null);
           setLoading(false);
           return;
         }
       } catch (e) {
-        console.error('Cache parse error:', e);
+        console.error("Cache parse error:", e);
       }
     }
     try {
       const res = await api.public.getHomepageProducts();
-      console.log('[Homepage] API response:', res);
+      console.log("[Homepage] API response:", res);
       if (res.success) {
         setHomepageData(res.data);
         setError(null);
-        if (typeof window !== 'undefined') {
-          localStorage.setItem(HOMEPAGE_CACHE_KEY, JSON.stringify({ data: res.data, timestamp: Date.now() }));
+        if (typeof window !== "undefined") {
+          localStorage.setItem(
+            HOMEPAGE_CACHE_KEY,
+            JSON.stringify({ data: res.data, timestamp: Date.now() }),
+          );
         }
       } else {
-        console.error('API did not return success:', res);
-        setError('Failed to fetch homepage data.');
+        console.error("API did not return success:", res);
+        setError("Failed to fetch homepage data.");
       }
     } catch (err) {
-      console.error('[Homepage] Error fetching homepage data:', err);
-      setError('Failed to fetch homepage data.');
+      console.error("[Homepage] Error fetching homepage data:", err);
+      setError("Failed to fetch homepage data.");
     }
     setLoading(false);
   };
@@ -94,7 +97,7 @@ export default function Home() {
     reviews: number;
     image: string;
     category: string;
-    badge?: 'Bestseller' | 'Trending' | 'Hot' | "Editor's Choice";
+    badge?: "Bestseller" | "Trending" | "Hot" | "Editor's Choice";
     discount?: number;
     isNew?: boolean;
     sellingPrice?: string;
@@ -118,51 +121,83 @@ export default function Home() {
       originalPrice: book.normal_price ? String(book.normal_price) : undefined,
       rating: 0,
       reviews: 0,
-      image: book.display_image || book.cover_image || '/images/book-images/profit-first.png',
-      category: Array.isArray(book.category) && book.category.length > 0 ? book.category[0].name : '',
+      image:
+        book.display_image ||
+        book.cover_image ||
+        "/images/book-images/profit-first.png",
+      category:
+        Array.isArray(book.category) && book.category.length > 0
+          ? book.category[0].name
+          : "",
     };
   };
   const mapCategory = (cat: HomepageCategory): HomeCategory => {
     return {
       name: cat.name,
       description: cat.description,
-      image: cat.display_image || '/images/book-images/profit-first.png',
-      count: (cat.total_books || 0) + ' Books',
+      image: cat.display_image || "/images/book-images/profit-first.png",
+      count: (cat.total_books || 0) + " Books",
     };
   };
 
   // Type guard for homepageData
   const getHomepageField = <T,>(key: string, fallback: T): T => {
-    if (homepageData && typeof homepageData === 'object' && homepageData !== null && key in homepageData) {
+    if (
+      homepageData &&
+      typeof homepageData === "object" &&
+      homepageData !== null &&
+      key in homepageData
+    ) {
       // @ts-expect-error: dynamic access
       return homepageData[key] as T;
     }
     return fallback;
   };
 
-  const featuredBooks = getHomepageField<HomepageBook[]>('featured', []).map(mapBook);
-  const newArrivals = getHomepageField<HomepageBook[]>('newArrivals', []).map(mapBook);
-  const categories = getHomepageField<HomepageCategory[]>('popularCategories', []).map(mapCategory);
-  const availableCategories = getHomepageField<HomepageCategory[]>('available_categories', []);
+  const featuredBooks = getHomepageField<HomepageBook[]>("featured", []).map(
+    mapBook,
+  );
+  const newArrivals = getHomepageField<HomepageBook[]>("newArrivals", []).map(
+    mapBook,
+  );
+  const categories = getHomepageField<HomepageCategory[]>(
+    "popularCategories",
+    [],
+  ).map(mapCategory);
+  const availableCategories = getHomepageField<HomepageCategory[]>(
+    "available_categories",
+    [],
+  );
 
-  console.log("Homepage data: ", homepageData)
+  console.log("Homepage data: ", homepageData);
 
   return (
     <>
       <Navbar />
       <Hero />
-      
+
       {/* Featured Section with Background */}
       <section className="bg-gradient-to-b from-white to-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
-        <FeaturedBooks books={featuredBooks} available_categories={availableCategories} loading={loading} error={error} onRetry={fetchHomepageData} />
+          <FeaturedBooks
+            books={featuredBooks}
+            available_categories={availableCategories}
+            loading={loading}
+            error={error}
+            onRetry={fetchHomepageData}
+          />
         </div>
       </section>
 
       {/* New Arrivals with Pattern Background */}
       <section className="bg-[url('/pattern.svg')] bg-opacity-5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
-          <NewArrivals books={newArrivals} loading={loading} error={error} onRetry={fetchHomepageData} />
+          <NewArrivals
+            books={newArrivals}
+            loading={loading}
+            error={error}
+            onRetry={fetchHomepageData}
+          />
         </div>
       </section>
 
@@ -170,29 +205,6 @@ export default function Home() {
       <section className="bg-gradient-to-b from-gray-50 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
           <Categories categories={categories} loading={loading} error={error} />
-        </div>
-      </section>
-
-      {/* Referral Section with Contrast */}
-      <section className="bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
-          <ReferralHighlight />
-        </div>
-      </section>
-
-      
-
-      {/* How It Works with Clean Background */}
-      <section className="bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
-          <HowItWorks />
-        </div>
-      </section>
-
-      {/* Testimonials with Subtle Pattern */}
-      <section className="bg-[url('/pattern.svg')] bg-opacity-5">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
-          <Testimonials />
         </div>
       </section>
     </>
