@@ -39,7 +39,7 @@ const usefulLinks = [
   { name: "Contact Us", href: "/help/contact" },
   { name: "Report a Product", href: "/help/report-product" },
   { name: "Returns & Refund Timeline", href: "/help/returns-timeline" },
-  { name: "Refund Policy", href: "/help/refund-policy" },
+  { name: "Refund Policy", href: "/refund-policy" },
 ];
 
 export default function Footer() {
@@ -297,7 +297,7 @@ export default function Footer() {
           </p>
           <div className="flex items-center gap-4 text-xs text-gray-500">
             <Link
-              href="/help/terms-and-conditions"
+              href="/terms-and-conditions"
               className="hover:text-brand-500 transition-colors"
             >
               Terms
@@ -309,7 +309,7 @@ export default function Footer() {
               Cookie Policy
             </Link>
             <Link
-              href="/help/refund-policy"
+              href="/privacy-policy"
               className="hover:text-brand-500 transition-colors"
             >
               Privacy
