@@ -135,7 +135,7 @@ export default function RefundPolicy() {
                   To request a refund, please follow these steps:
                 </p>
                 <ol className="list-decimal list-inside space-y-1 text-gray-700 ml-4">
-                  <li>Contact our support team at support@accesssellr.com</li>
+                  <li>Contact our support team at accessseller01@gmail.com</li>
                   <li>Provide your order number and the email address used for the purchase</li>
                   <li>Describe the reason for your refund request</li>
                   <li>Attach any relevant photographs or screenshots (for damaged or defective items)</li>
@@ -232,13 +232,13 @@ export default function RefundPolicy() {
             </p>
             <div className="text-gray-700 space-y-2">
               <p>
-                <strong>Email:</strong> support@accesssellr.com
+                <strong>Email:</strong> accessseller01@gmail.com
               </p>
               <p>
-                <strong>Phone:</strong> +234 XXX XXX XXXX
+                <strong>Phone:</strong> +2348025321179
               </p>
               <p>
-                <strong>Address:</strong> Ibadan, Nigeria
+                <strong>Address:</strong> The Knowledge Hub, 121/123 Obafemi Awolowo Way, Oke Ado, Ibadan, Nigeria
               </p>
             </div>
           </section>
