@@ -74,7 +74,7 @@ export default function Categories({
           {/* Categories Row */}
           <div
             ref={scrollContainerRef}
-            className="flex overflow-x-auto pb-4 gap-3 px-1 sm:px-0 scrollbar-hide scroll-smooth"
+            className="flex overflow-x-auto py-4 -my-4 gap-3 px-1 sm:px-0 scrollbar-hide scroll-smooth"
           >
             {loading ? (
               <div className="flex justify-center items-center w-full min-h-[200px]">
