@@ -16,6 +16,7 @@ import { useWishlist } from "@/hooks/useWishlist";
 import Link from "next/link";
 import { Loader } from "@/components/ui/loader";
 import { stripHtmlTags } from "@/lib/utils";
+import BookCard from "@/components/home/BookCard";
 
 interface Book {
   id: string;
@@ -191,6 +192,7 @@ export default function FeaturedBooks({
               key={categoryName}
               categoryName={categoryName}
               books={categoryBooks}
+              useNewCard={categoryName === "Primary Book Titles"}
               isInCart={isInCart}
               isInWishlist={isInWishlist}
               addToCart={addToCart}
@@ -210,6 +212,7 @@ export default function FeaturedBooks({
 interface CategorySectionProps {
   categoryName: string;
   books: Book[];
+  useNewCard?: boolean;
   isInCart: (bookId: string) => boolean;
   isInWishlist: (bookId: string) => boolean;
   addToCart: (item: {
@@ -229,6 +232,7 @@ interface CategorySectionProps {
 function CategorySection({
   categoryName,
   books,
+  useNewCard = false,
   isInCart,
   isInWishlist,
   addToCart,
@@ -296,12 +300,46 @@ function CategorySection({
           className="flex overflow-x-auto pb-4 gap-3 sm:gap-4 px-1 sm:px-0 sm:snap-x sm:snap-mandatory scrollbar-hide scroll-smooth"
         >
           {books.map((b, index) => {
-            const slug = `${b.id}-${b.title.toLowerCase().replace(/\s+/g, "-")}`;
             const displayCategory = Array.isArray(b.category)
               ? b.category.join(", ")
               : typeof b.category === "string"
                 ? b.category
                 : "";
+
+            if (useNewCard) {
+              return (
+                <BookCard
+                  key={b.id}
+                  id={String(b.id)}
+                  title={b.title}
+                  author={b.author}
+                  price={b.price}
+                  image={b.image}
+                  isInCart={isInCart(String(b.id))}
+                  isInWishlist={isInWishlist(String(b.id))}
+                  onAddToCart={() =>
+                    addToCart({
+                      productId: String(b.id),
+                      quantity: 1,
+                      price: Number(b.price),
+                      sellingPrice: Number(b.sellingPrice ?? b.price),
+                      normalPrice: Number(
+                        b.normalPrice ?? b.originalPrice ?? b.price,
+                      ),
+                      product: {
+                        name: b.title,
+                        image: b.image,
+                        category: displayCategory,
+                      },
+                    })
+                  }
+                  onRemoveFromCart={() => removeFromCart(String(b.id))}
+                  onToggleWishlist={() => toggleFavorite(b)}
+                />
+              );
+            }
+
+            const slug = `${b.id}-${b.title.toLowerCase().replace(/\s+/g, "-")}`;
             return (
               <Link
                 key={b.id}
