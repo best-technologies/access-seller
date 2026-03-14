@@ -1,8 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { ShoppingCart, Heart, Sparkles } from "lucide-react";
-import { BrandedButton } from "@/components/ui/button";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
@@ -36,7 +34,7 @@ export default function BookCard({
 
   return (
     <div className="group relative flex-none w-[170px] sm:w-[230px] snap-start">
-      <div className="relative bg-white rounded-2xl sm:rounded-3xl shadow-lg p-2 sm:p-2.5 h-full">
+      <div className="relative bg-white rounded-2xl border border-brand-300 sm:rounded-3xl p-2 sm:p-2.5 h-full">
         {/* Base card content */}
         <div className="flex flex-col h-full">
           {/* Inner image container */}
@@ -75,7 +73,7 @@ export default function BookCard({
           className={cn(
             "absolute inset-0 rounded-2xl sm:rounded-3xl flex flex-col items-center justify-center",
             "px-4 sm:px-5 py-6 transition-all duration-300 z-30",
-            "bg-gradient-to-b from-brand-700 via-brand-900 to-brand-950",
+            "bg-gradient-to-b from-brand-300 via-brand-200 to-brand-100",
             "sm:opacity-0 sm:pointer-events-none",
             "sm:group-hover:opacity-100 sm:group-hover:pointer-events-auto",
             mobileActive
@@ -87,7 +85,7 @@ export default function BookCard({
           }}
         >
           {/* Book title */}
-          <h3 className="text-brand-200 font-semibold italic text-sm sm:text-base text-center mb-6 line-clamp-2 px-1">
+          <h3 className="text-brand-700 font-semibold italic text-sm sm:text-base text-center mb-6 line-clamp-2 px-1">
             {title}
           </h3>
 
@@ -99,9 +97,8 @@ export default function BookCard({
                 if (isInCart) onRemoveFromCart();
                 else onAddToCart();
               }}
-              className="flex items-center gap-2.5 text-white/70 hover:text-white text-xs sm:text-sm transition-colors"
+              className="flex items-center gap-2.5 text-black hover:text-brand-500 text-xs sm:text-sm font-semibold transition-colors cursor-pointer"
             >
-              <ShoppingCart className="w-4 h-4 sm:w-[18px] sm:h-[18px]" />
               <span>{isInCart ? "Remove from Cart" : "Add to Cart"}</span>
             </button>
 
@@ -110,25 +107,18 @@ export default function BookCard({
                 e.stopPropagation();
                 onToggleWishlist();
               }}
-              className="flex items-center gap-2.5 text-white/70 hover:text-white text-xs sm:text-sm transition-colors"
+              className="flex items-center gap-2.5 text-black hover:text-brand-500 text-xs sm:text-sm font-semibold transition-colors cursor-pointer"
             >
-              <Heart
-                className={cn(
-                  "w-4 h-4 sm:w-[18px] sm:h-[18px]",
-                  isInWishlist && "fill-current text-red-400",
-                )}
-              />
               <span>{isInWishlist ? "Remove from Wishlist" : "Add to Wishlist"}</span>
             </button>
 
-            <div className="mt-3" onClick={(e) => e.stopPropagation()}>
-              <Link href={`/products/${slug}`}>
-                <BrandedButton size="sm" variant="outline">
-                  <Sparkles className="w-3.5 h-3.5 mr-1.5" />
-                  Full Details
-                </BrandedButton>
-              </Link>
-            </div>
+            <Link
+              href={`/products/${slug}`}
+              onClick={(e) => e.stopPropagation()}
+              className="flex items-center gap-2.5 text-black hover:text-brand-500 text-xs sm:text-sm font-semibold transition-colors"
+            >
+              Full Details
+            </Link>
           </div>
         </div>
 
