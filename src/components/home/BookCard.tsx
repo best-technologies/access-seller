@@ -38,7 +38,7 @@ export default function BookCard({
         {/* Base card content */}
         <div className="flex flex-col h-full">
           {/* Price badge — overlaps top-right of the card */}
-          <div className="absolute top-[2px] -right-[1px] z-20">
+          <div className="absolute top-0 md:top-[2px] -right-[2px] md:-right-[1px] z-20">
             <span className="bg-white text-brand-900 text-sm sm:text-base font-bold px-3.5 py-1.5 rounded-bl-2xl rounded-tr-2xl">
               ₦{Number(price).toLocaleString(undefined, { maximumFractionDigits: 0 })}
             </span>
