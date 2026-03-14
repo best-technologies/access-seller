@@ -37,14 +37,15 @@ export default function BookCard({
       <div className="relative bg-white rounded-2xl border border-brand-300 sm:rounded-3xl p-2 sm:p-2.5 h-full">
         {/* Base card content */}
         <div className="flex flex-col h-full">
+          {/* Price badge — overlaps top-right of the card */}
+          <div className="absolute top-[2px] -right-[1px] z-20">
+            <span className="bg-white text-brand-900 text-sm sm:text-base font-bold px-3.5 py-1.5 rounded-bl-2xl rounded-tr-2xl">
+              ₦{Number(price).toLocaleString(undefined, { maximumFractionDigits: 0 })}
+            </span>
+          </div>
+
           {/* Inner image container */}
           <div className="relative bg-brand-100 rounded-xl sm:rounded-2xl overflow-hidden">
-            {/* Price badge */}
-            <div className="absolute top-2 right-2.5 z-10">
-              <span className="text-sm sm:text-base font-bold text-brand-900">
-                ₦{Number(price).toLocaleString(undefined, { maximumFractionDigits: 0 })}
-              </span>
-            </div>
 
             {/* Book image — fully visible, not cropped */}
             <div className="flex items-center justify-center px-5 sm:px-7 py-6 sm:py-8 min-h-[190px] sm:min-h-[230px]">
