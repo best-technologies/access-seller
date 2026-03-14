@@ -1,12 +1,13 @@
 "use client";
 
-import { useRef, useState, useEffect, useCallback } from "react";
+import React, { useRef, useState, useEffect, useCallback } from "react";
 import { ChevronLeft, ChevronRight, RotateCcw } from "lucide-react";
 import { useCart } from "@/hooks/useCart";
 import { useWishlist } from "@/hooks/useWishlist";
 import Link from "next/link";
 import { Loader } from "@/components/ui/loader";
 import BookCard from "@/components/home/BookCard";
+import AdsBanner from "@/components/home/AdsBanner";
 
 interface Book {
   id: string;
@@ -35,13 +36,17 @@ interface FeaturedBooksProps {
 }
 
 const CATEGORY_SECTIONS = [
+  "Nursery Books",
   "Primary Book Titles",
   "E-Books",
   "Yoruba Literature",
-  "Nursery Books",
   "Uncategorized",
   "Junior Secondary Books",
 ];
+
+const CATEGORY_DISPLAY_NAMES: Record<string, string> = {
+  "Primary Book Titles": "Primary Books",
+};
 
 export default function FeaturedBooks({
   books = [],
@@ -127,32 +132,46 @@ export default function FeaturedBooks({
     );
   }
 
-  return (
-    <div className="space-y-10">
-      {CATEGORY_SECTIONS.map((categoryName) => {
-        const categoryBooks = getBooksByCategory(categoryName);
-
-        if (categoryBooks.length === 0) return null;
-
-        return (
-          <CategorySection
-            key={categoryName}
-            categoryName={categoryName}
-            books={categoryBooks}
-            isInCart={isInCart}
-            isInWishlist={isInWishlist}
-            addToCart={addToCart}
-            removeFromCart={removeFromCart}
-            toggleFavorite={toggleFavorite}
-          />
-        );
-      })}
-    </div>
+  const activeSections = CATEGORY_SECTIONS.filter(
+    (name) => getBooksByCategory(name).length > 0,
   );
+
+  const elements: React.ReactNode[] = [];
+  activeSections.forEach((categoryName, index) => {
+    elements.push(
+      <CategorySection
+        key={categoryName}
+        categoryName={categoryName}
+        displayName={CATEGORY_DISPLAY_NAMES[categoryName] || categoryName}
+        books={getBooksByCategory(categoryName)}
+        isInCart={isInCart}
+        isInWishlist={isInWishlist}
+        addToCart={addToCart}
+        removeFromCart={removeFromCart}
+        toggleFavorite={toggleFavorite}
+      />,
+    );
+
+    const isAfterPair = (index + 1) % 2 === 0;
+    const isNotLast = index < activeSections.length - 1;
+    if (isAfterPair && isNotLast) {
+      elements.push(
+        <AdsBanner
+          key={`ads-${index}`}
+          mobileImage="/images/ads/ads-banner-mobile.png"
+          tabletImage="/images/ads/ads-banner-tablet.png"
+          desktopImage="/images/ads/ads-banner-desktop.png"
+        />,
+      );
+    }
+  });
+
+  return <div className="space-y-10">{elements}</div>;
 }
 
 interface CategorySectionProps {
   categoryName: string;
+  displayName?: string;
   books: Book[];
   isInCart: (bookId: string) => boolean;
   isInWishlist: (bookId: string) => boolean;
@@ -170,6 +189,7 @@ interface CategorySectionProps {
 
 function CategorySection({
   categoryName,
+  displayName,
   books,
   isInCart,
   isInWishlist,
@@ -237,7 +257,7 @@ function CategorySection({
       {/* Section Header */}
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg sm:text-xl font-bold text-gray-900">
-          {categoryName}
+          {displayName || categoryName}
         </h2>
 
         {showNavButtons ? (
