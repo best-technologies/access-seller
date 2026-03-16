@@ -152,10 +152,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } 
     // Redirect authenticated users away from auth pages (except OTP pages)
     else if (isAuthenticated && isAuthPage && !isOtpPage) {
-      console.log('Redirecting authenticated user away from auth page to home');
-      router.replace('/');
+      const isAdminUser = user?.role === 'admin' || user?.role === 'super_admin';
+      console.log('Redirecting authenticated user away from auth page to', isAdminUser ? 'admin dashboard' : 'home');
+      router.replace(isAdminUser ? '/admin/dashboard' : '/');
     }
-  }, [isAuthenticated, pathname, isLoading, isLoggingIn, router]);
+  }, [isAuthenticated, user, pathname, isLoading, isLoggingIn, router]);
 
   ////////////////////////////////////////////////////////////////////////////////    login
   const login = async (email: string, password: string): Promise<string> => {
@@ -187,23 +188,39 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       // }
 
       if (accessToken) {
-        // Normal user: proceed with login
         tokenManager.set(accessToken);
 
-        // Fetch user details after successful login
         const userProfile = await api.user.getProfile();
 
         if (!userProfile.success) {
           throw new Error(userProfile.message || 'Failed to fetch user details');
         }
 
-        handleAuthStateChange(true, userProfile.data);
+        const userData = userProfile.data;
+        if (role && role !== 'user' && (!userData.role || userData.role === 'user')) {
+          userData.role = role;
+        }
+
+        handleAuthStateChange(true, userData);
+
+        const effectiveRole = userData.role || role;
+        const isAdminUser = effectiveRole === 'admin' || effectiveRole === 'super_admin';
+
+        if (isAdminUser) {
+          localStorage.removeItem('postAuthRedirect');
+          router.replace('/admin/dashboard');
+          return response.message || 'Login successful';
+        }
+
         const redirectUrl = typeof window !== 'undefined' ? localStorage.getItem('postAuthRedirect') : null;
         if (redirectUrl) {
           localStorage.removeItem('postAuthRedirect');
-          router.replace(redirectUrl);
-          return response.message || 'Login successful';
+          if (!redirectUrl.includes('/auth/')) {
+            router.replace(redirectUrl);
+            return response.message || 'Login successful';
+          }
         }
+
         router.replace('/');
         return response.message || 'Login successful';
       }

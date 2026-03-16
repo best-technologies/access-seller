@@ -79,13 +79,6 @@ function LoginForm() {
       // }
 
       toast.success(successMessage);
-
-      const redirectUrl = localStorage.getItem('postAuthRedirect');
-      if (redirectUrl) {
-        localStorage.removeItem('postAuthRedirect');
-        router.replace(redirectUrl);
-        return;
-      }
       
     } catch (error) {
       console.error('Login Error:', error);
@@ -98,8 +91,9 @@ function LoginForm() {
   }
 
   const handleLoginButtonClick = () => {
-    if (!searchParams.get('redirect') && !localStorage.getItem('postAuthRedirect')) {
-      localStorage.setItem('postAuthRedirect', window.location.href);
+    const redirect = searchParams.get('redirect');
+    if (redirect && !localStorage.getItem('postAuthRedirect')) {
+      localStorage.setItem('postAuthRedirect', redirect);
     }
   };
 

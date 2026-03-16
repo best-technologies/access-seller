@@ -75,8 +75,8 @@ export interface LoginResponse {
   success: boolean;
   message: string;
   data: {
-    access_token?: string; // optional, only for normal users
-    role?: string;         // optional, for privileged users
+    access_token?: string;
+    role?: string;
   };
 }
 
