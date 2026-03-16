@@ -175,15 +175,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       console.log("Login response: ", response.data)
       console.log("Role: ", role)
 
-      if (role !== "user") {
-        // Privileged user: redirect to OTP page and exit
-        // Don't set authentication state to true yet - wait for OTP verification
-        // Use window.location.href for immediate redirect to avoid navigation guard interference
-        const otpUrl = `/auth/verify-otp?email=${encodeURIComponent(email)}&role=${encodeURIComponent(role || 'admin')}`;
-        console.log('Redirecting admin user to OTP page:', otpUrl);
-        window.location.href = otpUrl;
-        return response.message || 'OTP sent to email. Please verify to continue.';
-      }
+      // COMMENTED OUT: Admin OTP redirect — backend now logs admin users in directly
+      // if (role !== "user") {
+      //   // Privileged user: redirect to OTP page and exit
+      //   // Don't set authentication state to true yet - wait for OTP verification
+      //   // Use window.location.href for immediate redirect to avoid navigation guard interference
+      //   const otpUrl = `/auth/verify-otp?email=${encodeURIComponent(email)}&role=${encodeURIComponent(role || 'admin')}`;
+      //   console.log('Redirecting admin user to OTP page:', otpUrl);
+      //   window.location.href = otpUrl;
+      //   return response.message || 'OTP sent to email. Please verify to continue.';
+      // }
 
       if (accessToken) {
         // Normal user: proceed with login
