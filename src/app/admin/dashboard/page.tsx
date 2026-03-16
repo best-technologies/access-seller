@@ -148,26 +148,26 @@ export default function AdminDashboard() {
       </div>
 
       {/* KPI Cards */}
-      <KPICards kpis={dashboardData?.dashboard.kpis || []} />
+      <KPICards kpis={dashboardData?.dashboard?.kpis || []} />
 
       {/* Main Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Recent Orders */}
         <div className="lg:col-span-2">
-          <RecentOrders orders={dashboardData?.dashboard.recentOrders as Order[] || []} />
+          <RecentOrders orders={(dashboardData?.dashboard?.recentOrders as Order[]) || []} />
         </div>
 
         {/* Sidebar */}
         <div className="space-y-6">
           {/* Notifications */}
-          <Notifications notifications={dashboardData?.dashboard.notifications as Notification[] || []} />
+          <Notifications notifications={(dashboardData?.dashboard?.notifications as Notification[]) || []} />
         </div>
       </div>
 
       {/* Bottom Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Top Products */}
-        <TopProducts products={dashboardData?.dashboard.topBooks as DashboardProduct[] || []} />
+        <TopProducts products={(dashboardData?.dashboard?.topBooks as DashboardProduct[]) || []} />
 
         {/* Quick Actions */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
