@@ -7,14 +7,8 @@ import type { BrowseProductsResponse, Product } from '@/types/product';
 import { PromoCodeVerifyResponse } from '@/types/admin/discounts/discount';
 import type { ApiResponse } from '@/types/order';
 
-let API_URL: string = "";
-if(process.env.NODE_ENV === "development") {
-  API_URL = "http://localhost:2000/api/v1"
-} else if (process.env.NODE_ENV === "production") {
-  API_URL = process.env.NEXT_PUBLIC_API_URL || "";
-}
-
-// const API_URL = "http://localhost:2000/api/v1"
+// Use API URL from .env - set NEXT_PUBLIC_API_URL for your backend (e.g. in .env, .env.development, .env.production)
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "";
 
 // Create axios instance with default config
 const axiosInstance: AxiosInstance = axios.create({
