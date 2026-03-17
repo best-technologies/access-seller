@@ -1,5 +1,6 @@
 "use client";
 
+import Navbar from "@/components/home/Navbar";
 import Footer from "@/components/home/Footer";
 import { AuthProvider } from "@/context/AuthContext";
 import { Toaster } from "react-hot-toast";
@@ -19,9 +20,7 @@ export default function RootLayout({
         <AuthProvider>
           <CartProvider>
             <WishlistProvider>
-              {/* Navbar at the top */}
-              {/* <Navbar /> */}
-              {/* Main Content */}
+              <Navbar />
               <main>{children}</main>
 
               {/* Footer */}

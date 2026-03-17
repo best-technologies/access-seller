@@ -1,12 +1,6 @@
-"use client";
-
-import Navbar from "@/components/home/Navbar";
-// import Footer from "@/components/home/Footer";
-
 export default function CookiesPolicy() {
   return (
     <>
-      <Navbar />
       <div className="min-h-screen bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           {/* Page Title */}
@@ -303,19 +297,18 @@ export default function CookiesPolicy() {
             </p>
             <div className="text-gray-700 space-y-2">
               <p>
-                <strong>Email:</strong> support@accesssellr.com
+                <strong>Email:</strong> accessseller01@gmail.com
               </p>
               <p>
-                <strong>Phone:</strong> +234 XXX XXX XXXX
+                <strong>Phone:</strong> +2348025321179
               </p>
               <p>
-                <strong>Address:</strong> Ibadan, Nigeria
+                <strong>Address:</strong> The Knowledge Hub, 121/123 Obafemi Awolowo Way, Oke Ado, Ibadan, Nigeria
               </p>
             </div>
           </section>
         </div>
       </div>
-      {/* <Footer /> */}
     </>
   );
 }

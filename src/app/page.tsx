@@ -4,7 +4,6 @@ import Hero from "@/components/home/Hero";
 import FeaturedBooks from "@/components/home/FeaturedBooks";
 import NewArrivals from "@/components/home/NewArrivals";
 import Categories from "@/components/home/Categories";
-import Navbar from "@/components/home/Navbar";
 import { useEffect, useState } from "react";
 import { api } from "@/services/api";
 
@@ -173,7 +172,6 @@ export default function Home() {
 
   return (
     <>
-      <Navbar />
       <Hero />
 
       {/* Featured Section with Background */}

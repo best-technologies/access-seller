@@ -1,0 +1,139 @@
+"use client";
+
+import { useState } from "react";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
+
+interface BookCardProps {
+  id: string;
+  title: string;
+  author: string;
+  price: string;
+  image: string;
+  onAddToCart: () => void;
+  onRemoveFromCart: () => void;
+  onToggleWishlist: () => void;
+  isInCart: boolean;
+  isInWishlist: boolean;
+}
+
+export default function BookCard({
+  id,
+  title,
+  author,
+  price,
+  image,
+  onAddToCart,
+  onRemoveFromCart,
+  onToggleWishlist,
+  isInCart,
+  isInWishlist,
+}: BookCardProps) {
+  const [mobileActive, setMobileActive] = useState(false);
+  const slug = `${id}-${title.toLowerCase().replace(/\s+/g, "-")}`;
+
+  return (
+    <div className="group relative flex-none w-[170px] sm:w-[230px] snap-start">
+      <div className="relative bg-white rounded-2xl border border-brand-300 sm:rounded-3xl p-2 sm:p-2.5 h-full">
+        {/* Base card content */}
+        <div className="flex flex-col h-full">
+          {/* Price badge — overlaps top-right of the card */}
+          <div className="absolute top-0 md:top-[2px] -right-[2px] md:-right-[1px] z-20">
+            <span className="bg-white text-brand-900 text-sm sm:text-base font-bold px-3.5 py-1.5 rounded-bl-2xl rounded-tr-2xl">
+              ₦{Number(price).toLocaleString(undefined, { maximumFractionDigits: 0 })}
+            </span>
+          </div>
+
+          {/* Inner image container */}
+          <div className="relative bg-brand-100 rounded-xl sm:rounded-2xl overflow-hidden">
+
+            {/* Book image — fully visible, not cropped */}
+            <div className="flex items-center justify-center px-5 sm:px-7 py-6 sm:py-8 min-h-[190px] sm:min-h-[230px]">
+              <img
+                src={image}
+                alt={title}
+                className="max-h-[150px] sm:max-h-[190px] w-auto object-contain drop-shadow-lg"
+                loading="lazy"
+              />
+            </div>
+          </div>
+
+          {/* Title & author */}
+          <div className="pt-2.5 sm:pt-3 px-1 pb-1">
+            <h3 className="font-bold text-xs sm:text-sm line-clamp-2 text-gray-900 leading-tight">
+              {title}
+            </h3>
+            <p className="text-[10px] sm:text-xs text-gray-500 mt-1 truncate">
+              {author}
+            </p>
+          </div>
+        </div>
+
+        {/* ── Overlay (hover on desktop, tap on mobile) ── */}
+        <div
+          className={cn(
+            "absolute inset-0 rounded-2xl sm:rounded-3xl flex flex-col items-center justify-center",
+            "px-4 sm:px-5 py-6 transition-all duration-300 z-30",
+            "bg-gradient-to-b from-brand-300 via-brand-200 to-brand-100",
+            "sm:opacity-0 sm:pointer-events-none",
+            "sm:group-hover:opacity-100 sm:group-hover:pointer-events-auto",
+            mobileActive
+              ? "opacity-100 pointer-events-auto"
+              : "opacity-0 pointer-events-none",
+          )}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setMobileActive(false);
+          }}
+        >
+          {/* Book title */}
+          <h3 className="text-brand-700 font-semibold italic text-sm sm:text-base text-center mb-6 line-clamp-2 px-1">
+            {title}
+          </h3>
+
+          {/* Action items */}
+          <div className="flex flex-col gap-3 items-center">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                if (isInCart) onRemoveFromCart();
+                else onAddToCart();
+              }}
+              className="flex items-center gap-2.5 text-black hover:text-brand-500 text-xs sm:text-sm font-semibold transition-colors cursor-pointer"
+            >
+              <span>{isInCart ? "Remove from Cart" : "Add to Cart"}</span>
+            </button>
+
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onToggleWishlist();
+              }}
+              className="flex items-center gap-2.5 text-black hover:text-brand-500 text-xs sm:text-sm font-semibold transition-colors cursor-pointer"
+            >
+              <span>{isInWishlist ? "Remove from Wishlist" : "Add to Wishlist"}</span>
+            </button>
+
+            <Link
+              href={`/products/${slug}`}
+              onClick={(e) => e.stopPropagation()}
+              className="flex items-center gap-2.5 text-black hover:text-brand-500 text-xs sm:text-sm font-semibold transition-colors"
+            >
+              Full Details
+            </Link>
+          </div>
+        </div>
+
+        {/* Mobile tap target — only present when overlay is hidden */}
+        {!mobileActive && (
+          <div
+            className="absolute inset-0 z-20 sm:hidden"
+            onClick={() => setMobileActive(true)}
+            role="button"
+            tabIndex={0}
+            aria-label="Show book actions"
+          />
+        )}
+      </div>
+    </div>
+  );
+}
