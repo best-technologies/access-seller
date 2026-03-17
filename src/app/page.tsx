@@ -134,8 +134,7 @@ export default function Home() {
   // Type guard for homepageData
   const getHomepageField = <T,>(key: string, fallback: T): T => {
     if (homepageData && typeof homepageData === 'object' && homepageData !== null && key in homepageData) {
-      // @ts-expect-error: dynamic access
-      return homepageData[key] as T;
+      return (homepageData as Record<string, unknown>)[key] as T;
     }
     return fallback;
   };
